@@ -59,14 +59,30 @@ const Settings = () => {
   const handleAvatarChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
     if (file) {
-      if (file.size > 1024 * 1024) {
+      // Validate file type (JPG, PNG only)
+      const validTypes = ['image/jpeg', 'image/jpg', 'image/png'];
+      if (!validTypes.includes(file.type)) {
         toast({
-          title: 'File too large',
-          description: 'Please select an image under 1MB.',
+          title: 'Invalid file type',
+          description: 'Please select a JPG or PNG image.',
           variant: 'destructive',
         });
+        e.target.value = ''; // Reset input
         return;
       }
+
+      // Validate file size (5MB max)
+      const maxSize = 5 * 1024 * 1024; // 5MB in bytes
+      if (file.size > maxSize) {
+        toast({
+          title: 'File too large',
+          description: 'Please select an image under 5MB.',
+          variant: 'destructive',
+        });
+        e.target.value = ''; // Reset input
+        return;
+      }
+
       setAvatarFile(file);
       setPreviewUrl(URL.createObjectURL(file));
     }
@@ -292,7 +308,7 @@ const Settings = () => {
                           <input
                             id="avatar-upload"
                             type="file"
-                            accept="image/*"
+                            accept="image/jpeg,image/jpg,image/png"
                             className="sr-only"
                             onChange={handleAvatarChange}
                             disabled={uploading}
@@ -314,7 +330,7 @@ const Settings = () => {
                         )}
                       </div>
                       <p className="text-xs text-muted-foreground">
-                        JPG, GIF, or PNG. Max 1MB.
+                        JPG or PNG. Max file size 5MB.
                       </p>
                     </div>
 
