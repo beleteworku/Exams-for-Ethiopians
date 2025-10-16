@@ -1,195 +1,88 @@
-import { useNavigate } from 'react-router-dom';
-import { useEffect, useState } from 'react';
-import { Card } from '@/components/ui/card';
-import { Button } from '@/components/ui/button';
-import { BookOpen, ClipboardCheck, TrendingUp, Timer } from 'lucide-react';
-import { useAuth } from '@/hooks/useAuth';
-import { supabase } from '@/integrations/supabase/client';
-import ProfileDropdown from '@/components/ProfileDropdown';
+import { useTranslation } from "react-i18next";
+import { useNavigate } from "react-router-dom";
+import ProfileDropdown from "@/components/ProfileDropdown";
+import { LanguageThemeToggle } from "@/components/LanguageThemeToggle";
+import { HeroSection } from "@/components/HeroSection";
+import { SubjectCard } from "@/components/SubjectCard";
+import { Footer } from "@/components/Footer";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { Search, Brain, FlaskConical, Leaf, Scale, DollarSign, Languages, Globe, Clock, BookOpen, Atom } from "lucide-react";
 
 const Home = () => {
+  const { t } = useTranslation();
   const navigate = useNavigate();
-  const { user } = useAuth();
-  const [fullName, setFullName] = useState<string>('');
 
-  useEffect(() => {
-    const fetchProfile = async () => {
-      if (user) {
-        // @ts-ignore - Type will be auto-generated
-        const { data, error } = await supabase.from('profiles')
-          .select('full_name')
-          .eq('user_id', user.id)
-          .single();
-
-        if (data && !error) {
-          // @ts-ignore - Type will be auto-generated
-          setFullName(data.full_name || '');
-        }
-      }
-    };
-
-    fetchProfile();
-  }, [user]);
+  const subjects = [
+    { id: 'aptitude', title: t('aptitudeTest'), description: t('aptitudeTestDesc'), icon: Brain },
+    { id: 'biology', title: t('biology'), description: t('biologyDesc'), icon: Leaf },
+    { id: 'chemistry', title: t('chemistry'), description: t('chemistryDesc'), icon: FlaskConical },
+    { id: 'civics', title: t('civicsEthics'), description: t('civicsEthicsDesc'), icon: Scale },
+    { id: 'economics', title: t('economics'), description: t('economicsDesc'), icon: DollarSign },
+    { id: 'english', title: t('english'), description: t('englishDesc'), icon: Languages },
+    { id: 'geography', title: t('geography'), description: t('geographyDesc'), icon: Globe },
+    { id: 'history', title: t('history'), description: t('historyDesc'), icon: Clock },
+    { id: 'math-natural', title: t('mathNatural'), description: t('mathNaturalDesc'), icon: BookOpen },
+    { id: 'math-social', title: t('mathSocial'), description: t('mathSocialDesc'), icon: BookOpen },
+    { id: 'physics', title: t('physics'), description: t('physicsDesc'), icon: Atom },
+  ];
 
   return (
     <div className="min-h-screen bg-background">
       {/* Navigation Bar */}
-      <nav className="border-b border-border bg-card shadow-sm">
-        <div className="max-w-6xl mx-auto px-6 py-4">
-          <div className="flex items-center justify-between">
-            <h2 className="text-lg font-semibold text-foreground">
-              Learning Platform
-            </h2>
-            <ProfileDropdown />
+      <nav className="sticky top-0 z-50 border-b bg-card/95 backdrop-blur supports-[backdrop-filter]:bg-card/60">
+        <div className="container mx-auto px-4 h-16 flex items-center justify-between">
+          <h1 className="text-2xl font-bold text-primary">zeha.com</h1>
+          <div className="flex items-center gap-6">
+            <Button variant="ghost">{t('home')}</Button>
+            <Button variant="ghost">{t('exam')}</Button>
+            <div className="flex items-center gap-2">
+              <LanguageThemeToggle />
+              <Button variant="ghost">{t('logIn')}</Button>
+              <Button>{t('signUp')}</Button>
+              <ProfileDropdown />
+            </div>
           </div>
         </div>
       </nav>
 
-      <div className="max-w-6xl mx-auto px-6 py-12">
+      {/* Hero Section */}
+      <HeroSection />
 
-        {/* Welcome Message */}
-        {fullName && (
-          <div className="text-center mb-8 animate-fade-in">
-            <div className="bg-card p-6 rounded-xl shadow-md border border-border">
-              <p className="text-lg text-foreground font-semibold">
-                Account created successfully!
-              </p>
-              <p className="text-xl text-foreground mt-2">
-                Welcome to the platform, <span className="text-primary font-bold">{fullName}</span>!
-              </p>
-            </div>
+      {/* Subjects Section */}
+      <section className="container mx-auto px-4 py-20">
+        <div className="text-center space-y-4 mb-12">
+          <h2 className="text-3xl font-bold">{t('universityEntranceExams')}</h2>
+          <p className="text-muted-foreground">{t('selectSubject')}</p>
+        </div>
+
+        {/* Search Bar */}
+        <div className="max-w-2xl mx-auto mb-12">
+          <div className="relative">
+            <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
+            <Input 
+              placeholder={t('searchSubjects')}
+              className="pl-10"
+            />
           </div>
-        )}
-
-        {/* Header */}
-        <div className="text-center mb-12 animate-fade-in">
-          <h1 className="text-5xl font-bold text-foreground mb-4">
-            Interactive Learning Platform
-          </h1>
-          <p className="text-xl text-muted-foreground">
-            Start learning with practice mode and switch to exam mode anytime
-          </p>
         </div>
 
-        {/* Mode Selection Cards */}
-        <div className="grid md:grid-cols-2 gap-8 max-w-4xl mx-auto">
-          {/* Practice Mode Card */}
-          <Card className="group hover:border-primary/50 transition-all duration-300 hover:shadow-lg hover:shadow-primary/20 animate-scale-in">
-            <div className="p-8">
-              <div className="w-16 h-16 rounded-2xl bg-primary/20 flex items-center justify-center mb-6 group-hover:scale-110 transition-transform">
-                <BookOpen className="w-8 h-8 text-primary" />
-              </div>
-              
-              <h2 className="text-2xl font-bold text-foreground mb-3">
-                Practice Mode (Default)
-              </h2>
-              
-              <p className="text-muted-foreground mb-6">
-                Learn at your own pace with instant feedback, hints, and detailed explanations for every question.
-              </p>
-
-              <div className="space-y-3 mb-6">
-                <div className="flex items-start gap-3">
-                  <div className="w-5 h-5 rounded-full bg-success/20 flex items-center justify-center flex-shrink-0 mt-0.5">
-                    <div className="w-2 h-2 rounded-full bg-success" />
-                  </div>
-                  <span className="text-sm text-foreground">Instant feedback on answers</span>
-                </div>
-                <div className="flex items-start gap-3">
-                  <div className="w-5 h-5 rounded-full bg-success/20 flex items-center justify-center flex-shrink-0 mt-0.5">
-                    <div className="w-2 h-2 rounded-full bg-success" />
-                  </div>
-                  <span className="text-sm text-foreground">Helpful hints available</span>
-                </div>
-                <div className="flex items-start gap-3">
-                  <div className="w-5 h-5 rounded-full bg-success/20 flex items-center justify-center flex-shrink-0 mt-0.5">
-                    <div className="w-2 h-2 rounded-full bg-success" />
-                  </div>
-                  <span className="text-sm text-foreground">Detailed explanations</span>
-                </div>
-                <div className="flex items-start gap-3">
-                  <div className="w-5 h-5 rounded-full bg-success/20 flex items-center justify-center flex-shrink-0 mt-0.5">
-                    <div className="w-2 h-2 rounded-full bg-success" />
-                  </div>
-                  <span className="text-sm text-foreground">Navigate back and forth</span>
-                </div>
-              </div>
-
-              <Button 
-                size="lg" 
-                className="w-full"
-                onClick={() => navigate('/quiz')}
-              >
-                Start Learning
-                <TrendingUp className="w-4 h-4 ml-2" />
-              </Button>
-            </div>
-          </Card>
-
-          {/* Exam Mode Card */}
-          <Card className="group hover:border-accent/50 transition-all duration-300 hover:shadow-lg hover:shadow-accent/20 animate-scale-in">
-            <div className="p-8">
-              <div className="w-16 h-16 rounded-2xl bg-accent/20 flex items-center justify-center mb-6 group-hover:scale-110 transition-transform">
-                <ClipboardCheck className="w-8 h-8 text-accent" />
-              </div>
-              
-              <h2 className="text-2xl font-bold text-foreground mb-3">
-                Exam Mode
-              </h2>
-              
-              <p className="text-muted-foreground mb-6">
-                Test your knowledge in a real exam environment. Switch to this mode anytime using the toggle button.
-              </p>
-
-              <div className="space-y-3 mb-6">
-                <div className="flex items-start gap-3">
-                  <div className="w-5 h-5 rounded-full bg-accent/20 flex items-center justify-center flex-shrink-0 mt-0.5">
-                    <div className="w-2 h-2 rounded-full bg-accent" />
-                  </div>
-                  <span className="text-sm text-foreground">Realistic exam conditions</span>
-                </div>
-                <div className="flex items-start gap-3">
-                  <div className="w-5 h-5 rounded-full bg-accent/20 flex items-center justify-center flex-shrink-0 mt-0.5">
-                    <div className="w-2 h-2 rounded-full bg-accent" />
-                  </div>
-                  <span className="text-sm text-foreground">No hints during quiz</span>
-                </div>
-                <div className="flex items-start gap-3">
-                  <div className="w-5 h-5 rounded-full bg-accent/20 flex items-center justify-center flex-shrink-0 mt-0.5">
-                    <div className="w-2 h-2 rounded-full bg-accent" />
-                  </div>
-                  <span className="text-sm text-foreground">Feedback at the end</span>
-                </div>
-                <div className="flex items-start gap-3">
-                  <div className="w-5 h-5 rounded-full bg-accent/20 flex items-center justify-center flex-shrink-0 mt-0.5">
-                    <div className="w-2 h-2 rounded-full bg-accent" />
-                  </div>
-                  <span className="text-sm text-foreground">Performance analytics</span>
-                </div>
-              </div>
-
-              <Button 
-                size="lg" 
-                className="w-full"
-                onClick={() => navigate('/quiz')}
-              >
-                Start Learning
-                <Timer className="w-4 h-4 ml-2" />
-              </Button>
-            </div>
-          </Card>
+        {/* Subject Cards Grid */}
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+          {subjects.map((subject) => (
+            <SubjectCard
+              key={subject.id}
+              title={subject.title}
+              description={subject.description}
+              icon={subject.icon}
+              onClick={() => navigate(`/quiz?subject=${subject.id}`)}
+            />
+          ))}
         </div>
+      </section>
 
-        {/* Additional Info */}
-        <div className="mt-12 text-center">
-          <Card className="inline-block p-6 bg-secondary/50">
-            <p className="text-sm text-muted-foreground max-w-2xl">
-              💡 <span className="font-semibold text-foreground">Tip:</span> The quiz starts in Practice Mode by default. 
-              Use the toggle button at the top to switch between Practice and Exam modes anytime during your learning session.
-            </p>
-          </Card>
-        </div>
-      </div>
+      {/* Footer */}
+      <Footer />
     </div>
   );
 };

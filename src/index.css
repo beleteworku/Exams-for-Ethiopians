@@ -8,6 +8,49 @@ All colors MUST be HSL.
 
 @layer base {
   :root {
+    --background: 0 0% 100%;
+    --foreground: 0 0% 3.9%;
+
+    --card: 0 0% 100%;
+    --card-foreground: 0 0% 3.9%;
+
+    --popover: 0 0% 100%;
+    --popover-foreground: 0 0% 3.9%;
+
+    --primary: 217 91% 60%;
+    --primary-foreground: 0 0% 100%;
+
+    --secondary: 0 0% 96%;
+    --secondary-foreground: 0 0% 9%;
+
+    --muted: 0 0% 96%;
+    --muted-foreground: 0 0% 45%;
+
+    --accent: 217 91% 95%;
+    --accent-foreground: 217 91% 40%;
+
+    --success: 142 76% 45%;
+    --success-foreground: 0 0% 100%;
+
+    --destructive: 0 84% 60%;
+    --destructive-foreground: 0 0% 98%;
+
+    --border: 0 0% 90%;
+    --input: 0 0% 90%;
+    --ring: 217 91% 60%;
+
+    --radius: 0.75rem;
+
+    --progress-bar: 217 91% 60%;
+    --progress-bg: 0 0% 95%;
+    
+    /* Advanced gradients */
+    --gradient-primary: linear-gradient(135deg, hsl(217 91% 60%), hsl(217 91% 70%));
+    --gradient-success: linear-gradient(135deg, hsl(142 76% 45%), hsl(142 76% 55%));
+    --gradient-destructive: linear-gradient(135deg, hsl(0 84% 60%), hsl(0 84% 70%));
+  }
+
+  .dark {
     --background: 0 0% 7%;
     --foreground: 0 0% 98%;
 
@@ -26,8 +69,8 @@ All colors MUST be HSL.
     --muted: 0 0% 18%;
     --muted-foreground: 0 0% 65%;
 
-    --accent: 217 91% 70%;
-    --accent-foreground: 0 0% 100%;
+    --accent: 217 91% 25%;
+    --accent-foreground: 217 91% 90%;
 
     --success: 142 76% 45%;
     --success-foreground: 0 0% 100%;
@@ -39,15 +82,8 @@ All colors MUST be HSL.
     --input: 0 0% 20%;
     --ring: 217 91% 60%;
 
-    --radius: 0.75rem;
-
     --progress-bar: 217 91% 60%;
     --progress-bg: 0 0% 25%;
-    
-    /* Advanced gradients */
-    --gradient-primary: linear-gradient(135deg, hsl(217 91% 60%), hsl(217 91% 70%));
-    --gradient-success: linear-gradient(135deg, hsl(142 76% 45%), hsl(142 76% 55%));
-    --gradient-destructive: linear-gradient(135deg, hsl(0 84% 60%), hsl(0 84% 70%));
   }
 }
 

@@ -1,11 +1,13 @@
 import { useState, useEffect, useRef } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { useTranslation } from 'react-i18next';
 import { User, Settings, LogOut, ChevronDown } from 'lucide-react';
 import { useAuth } from '@/hooks/useAuth';
 import { supabase } from '@/integrations/supabase/client';
 import { cn } from '@/lib/utils';
 
 const ProfileDropdown = () => {
+  const { t } = useTranslation();
   const navigate = useNavigate();
   const { user, signOut } = useAuth();
   const [isOpen, setIsOpen] = useState(false);
@@ -151,7 +153,7 @@ const ProfileDropdown = () => {
               role="menuitem"
             >
               <Settings className="h-4 w-4" />
-              Settings
+              {t('settings')}
             </button>
           </div>
 
@@ -167,7 +169,7 @@ const ProfileDropdown = () => {
               role="menuitem"
             >
               <LogOut className="h-4 w-4" />
-              Log Out
+              {t('logOut')}
             </button>
           </div>
         </div>
