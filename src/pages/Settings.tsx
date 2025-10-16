@@ -39,6 +39,7 @@ const Settings = () => {
 
     // @ts-ignore - Type will be auto-generated
     const { data, error } = await supabase
+      // @ts-ignore - Type will be auto-generated
       .from('profiles')
       .select('full_name, username, bio, avatar_url')
       .eq('user_id', user.id)
@@ -102,7 +103,9 @@ const Settings = () => {
 
       // @ts-ignore - Type will be auto-generated
       await supabase
+        // @ts-ignore - Type will be auto-generated
         .from('profiles')
+        // @ts-ignore - Type will be auto-generated
         .update({ avatar_url: null })
         .eq('user_id', user.id);
 
@@ -169,7 +172,9 @@ const Settings = () => {
 
       // @ts-ignore - Type will be auto-generated
       const { error } = await supabase
+        // @ts-ignore - Type will be auto-generated
         .from('profiles')
+        // @ts-ignore - Type will be auto-generated
         .update(updateData)
         .eq('user_id', user.id);
 
