@@ -2,13 +2,14 @@ import { useNavigate } from 'react-router-dom';
 import { useEffect, useState } from 'react';
 import { Card } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
-import { BookOpen, ClipboardCheck, TrendingUp, Timer, LogOut, Settings as SettingsIcon } from 'lucide-react';
+import { BookOpen, ClipboardCheck, TrendingUp, Timer } from 'lucide-react';
 import { useAuth } from '@/hooks/useAuth';
 import { supabase } from '@/integrations/supabase/client';
+import ProfileDropdown from '@/components/ProfileDropdown';
 
 const Home = () => {
   const navigate = useNavigate();
-  const { signOut, user } = useAuth();
+  const { user } = useAuth();
   const [fullName, setFullName] = useState<string>('');
 
   useEffect(() => {
@@ -32,28 +33,19 @@ const Home = () => {
 
   return (
     <div className="min-h-screen bg-background">
-      <div className="max-w-6xl mx-auto px-6 py-12">
-        {/* Header with Settings and Sign Out */}
-        <div className="flex justify-end gap-2 mb-6">
-          <Button 
-            variant="ghost" 
-            size="sm"
-            onClick={() => navigate('/settings')}
-            className="gap-2"
-          >
-            <SettingsIcon className="w-4 h-4" />
-            Settings
-          </Button>
-          <Button 
-            variant="ghost" 
-            size="sm"
-            onClick={signOut}
-            className="gap-2"
-          >
-            <LogOut className="w-4 h-4" />
-            Sign Out
-          </Button>
+      {/* Navigation Bar */}
+      <nav className="border-b border-border bg-card shadow-sm">
+        <div className="max-w-6xl mx-auto px-6 py-4">
+          <div className="flex items-center justify-between">
+            <h2 className="text-lg font-semibold text-foreground">
+              Learning Platform
+            </h2>
+            <ProfileDropdown />
+          </div>
         </div>
+      </nav>
+
+      <div className="max-w-6xl mx-auto px-6 py-12">
 
         {/* Welcome Message */}
         {fullName && (
