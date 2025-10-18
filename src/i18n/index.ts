@@ -75,6 +75,9 @@ const resources = {
       // Exam Selection
       selectYear: 'Select a year to start your exam practice',
       entranceExam: 'Entrance Exam',
+      searchYears: 'Search years...',
+      noYearsFound: 'No years found matching your search',
+      noSubjectsFound: 'No subjects found matching your search',
       
       // Footer
       tagline: 'Empowering students and professionals to achieve their goals through comprehensive exam preparation.',
@@ -184,6 +187,9 @@ const resources = {
       // Exam Selection
       selectYear: 'የፈተና ልምምድዎን ለመጀመር ዓመት ይምረጡ',
       entranceExam: 'መግቢያ ፈተና',
+      searchYears: 'ዓመቶችን ይፈልጉ...',
+      noYearsFound: 'ከፍለጋዎ ጋር የሚዛመድ ዓመት አልተገኘም',
+      noSubjectsFound: 'ከፍለጋዎ ጋር የሚዛመድ ጥናት አልተገኘም',
       
       // Footer
       tagline: 'ተማሪዎችን እና ባለሙያዎችን አላማዎቻቸውን በአጠቃላይ የፈተና ዝግጅት እንዲያሳኩ ማብቃት።',

@@ -1,11 +1,10 @@
 import { useTranslation } from "react-i18next";
-import { useNavigate, useParams } from "react-router-dom";
-import { useState } from "react";
-import { SubjectCard } from "@/components/SubjectCard";
+import { useNavigate, useParams, useSearchParams } from "react-router-dom";
 import { Footer } from "@/components/Footer";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { Search, Brain, FlaskConical, Leaf, Scale, DollarSign, Languages, Globe, Clock, BookOpen, Atom, Home } from "lucide-react";
+import { Card, CardContent } from "@/components/ui/card";
+import { Search, Home, Calendar } from "lucide-react";
 import { LanguageThemeToggle } from "@/components/LanguageThemeToggle";
 import ProfileDropdown from "@/components/ProfileDropdown";
 import {
@@ -16,85 +15,38 @@ import {
   NavigationMenuList,
   NavigationMenuTrigger,
 } from "@/components/ui/navigation-menu";
+import { useState } from "react";
 
-const ExamType = () => {
+const SubjectExam = () => {
   const { t } = useTranslation();
   const navigate = useNavigate();
   const { examType } = useParams<{ examType: string }>();
+  const [searchParams] = useSearchParams();
+  const subject = searchParams.get('subject');
+  const subjectName = searchParams.get('name');
+  
   const [searchQuery, setSearchQuery] = useState("");
 
-  // Define subjects for each exam type
-  const allSubjects = {
-    entrance: [
-      { id: 'aptitude', title: t('aptitudeTest'), description: t('aptitudeTestDesc'), icon: Brain },
-      { id: 'biology', title: t('biology'), description: t('biologyDesc'), icon: Leaf },
-      { id: 'chemistry', title: t('chemistry'), description: t('chemistryDesc'), icon: FlaskConical },
-      { id: 'civics', title: t('civicsEthics'), description: t('civicsEthicsDesc'), icon: Scale },
-      { id: 'economics', title: t('economics'), description: t('economicsDesc'), icon: DollarSign },
-      { id: 'english', title: t('english'), description: t('englishDesc'), icon: Languages },
-      { id: 'geography', title: t('geography'), description: t('geographyDesc'), icon: Globe },
-      { id: 'history', title: t('history'), description: t('historyDesc'), icon: Clock },
-      { id: 'math-natural', title: t('mathNatural'), description: t('mathNaturalDesc'), icon: BookOpen },
-      { id: 'math-social', title: t('mathSocial'), description: t('mathSocialDesc'), icon: BookOpen },
-      { id: 'physics', title: t('physics'), description: t('physicsDesc'), icon: Atom },
-    ],
-    exit: [
-      { id: 'biology', title: t('biology'), description: t('biologyDesc'), icon: Leaf },
-      { id: 'chemistry', title: t('chemistry'), description: t('chemistryDesc'), icon: FlaskConical },
-      { id: 'civics', title: t('civicsEthics'), description: t('civicsEthicsDesc'), icon: Scale },
-      { id: 'economics', title: t('economics'), description: t('economicsDesc'), icon: DollarSign },
-      { id: 'english', title: t('english'), description: t('englishDesc'), icon: Languages },
-      { id: 'geography', title: t('geography'), description: t('geographyDesc'), icon: Globe },
-      { id: 'history', title: t('history'), description: t('historyDesc'), icon: Clock },
-      { id: 'math-natural', title: t('mathNatural'), description: t('mathNaturalDesc'), icon: BookOpen },
-      { id: 'physics', title: t('physics'), description: t('physicsDesc'), icon: Atom },
-    ],
-    ngat: [
-      { id: 'aptitude', title: t('aptitudeTest'), description: t('aptitudeTestDesc'), icon: Brain },
-      { id: 'english', title: t('english'), description: t('englishDesc'), icon: Languages },
-      { id: 'math-natural', title: t('mathNatural'), description: t('mathNaturalDesc'), icon: BookOpen },
-    ],
-    'work-exam': [
-      { id: 'aptitude', title: t('aptitudeTest'), description: t('aptitudeTestDesc'), icon: Brain },
-      { id: 'civics', title: t('civicsEthics'), description: t('civicsEthicsDesc'), icon: Scale },
-      { id: 'english', title: t('english'), description: t('englishDesc'), icon: Languages },
-    ],
-    'grade-6': [
-      { id: 'english', title: t('english'), description: t('englishDesc'), icon: Languages },
-      { id: 'math-natural', title: t('mathNatural'), description: t('mathNaturalDesc'), icon: BookOpen },
-      { id: 'civics', title: t('civicsEthics'), description: t('civicsEthicsDesc'), icon: Scale },
-      { id: 'history', title: t('history'), description: t('historyDesc'), icon: Clock },
-      { id: 'geography', title: t('geography'), description: t('geographyDesc'), icon: Globe },
-    ],
-    'grade-8': [
-      { id: 'biology', title: t('biology'), description: t('biologyDesc'), icon: Leaf },
-      { id: 'chemistry', title: t('chemistry'), description: t('chemistryDesc'), icon: FlaskConical },
-      { id: 'english', title: t('english'), description: t('englishDesc'), icon: Languages },
-      { id: 'math-natural', title: t('mathNatural'), description: t('mathNaturalDesc'), icon: BookOpen },
-      { id: 'physics', title: t('physics'), description: t('physicsDesc'), icon: Atom },
-      { id: 'civics', title: t('civicsEthics'), description: t('civicsEthicsDesc'), icon: Scale },
-      { id: 'history', title: t('history'), description: t('historyDesc'), icon: Clock },
-      { id: 'geography', title: t('geography'), description: t('geographyDesc'), icon: Globe },
-    ],
-  };
+  // Generate years from 2014 to current year
+  const currentYear = new Date().getFullYear();
+  const years = Array.from({ length: currentYear - 2013 }, (_, i) => 2014 + i).reverse();
 
-  const examTypeKey = examType as keyof typeof allSubjects;
-  const subjects = allSubjects[examTypeKey] || allSubjects.entrance;
-
-  // Filter subjects based on search
-  const filteredSubjects = subjects.filter(subject =>
-    subject.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
-    subject.description.toLowerCase().includes(searchQuery.toLowerCase())
+  // Filter years based on search
+  const filteredYears = years.filter(year => 
+    year.toString().includes(searchQuery)
   );
 
   const examTitles: Record<string, string> = {
-    entrance: t('universityEntranceExams'),
-    exit: t('exitExam'),
+    entrance: t('entrance'),
+    exit: t('exit'),
     ngat: t('ngat'),
     'work-exam': t('workExam'),
     'grade-6': t('grade6'),
     'grade-8': t('grade8'),
   };
+
+  const examTypeKey = examType as keyof typeof examTitles;
+  const examTitle = examTitles[examTypeKey] || t('entrance');
 
   return (
     <div className="min-h-screen bg-background">
@@ -177,15 +129,21 @@ const ExamType = () => {
             {t('home')}
           </Button>
           <span>/</span>
-          <span className="text-foreground font-medium">{examTitles[examTypeKey]}</span>
+          <Button variant="link" className="h-auto p-0 text-muted-foreground" onClick={() => navigate(`/exam/${examType}`)}>
+            {examTitle}
+          </Button>
+          <span>/</span>
+          <span className="text-foreground font-medium">{subjectName} {examTitle}</span>
         </div>
       </div>
 
-      {/* Exam Subjects Section */}
+      {/* Years Section */}
       <section className="container mx-auto px-4 py-12">
         <div className="text-center space-y-4 mb-12">
-          <h1 className="text-4xl font-bold">{examTitles[examTypeKey]}</h1>
-          <p className="text-muted-foreground">{t('selectSubject')}</p>
+          <h1 className="text-4xl font-bold">
+            <span className="text-primary">{subjectName}</span> {examTitle}
+          </h1>
+          <p className="text-muted-foreground">{t('selectYear')}</p>
         </div>
 
         {/* Search Bar */}
@@ -193,7 +151,7 @@ const ExamType = () => {
           <div className="relative">
             <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
             <Input 
-              placeholder={t('searchSubjects')}
+              placeholder={t('searchYears')}
               className="pl-10"
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
@@ -201,21 +159,29 @@ const ExamType = () => {
           </div>
         </div>
 
-        {/* Subject Cards Grid */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-          {filteredSubjects.length > 0 ? (
-            filteredSubjects.map((subject) => (
-              <SubjectCard
-                key={subject.id}
-                title={subject.title}
-                description={subject.description}
-                icon={subject.icon}
-                onClick={() => navigate(`/exam/${examType}/subject?subject=${subject.id}&name=${encodeURIComponent(subject.title)}`)}
-              />
+        {/* Year Cards Grid */}
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 max-w-5xl mx-auto">
+          {filteredYears.length > 0 ? (
+            filteredYears.map((year) => (
+              <Card 
+                key={year}
+                className="cursor-pointer hover:shadow-lg transition-all duration-300 hover:scale-105 border-2 hover:border-primary"
+                onClick={() => navigate(`/quiz?subject=${subject}&exam=${examType}&year=${year}`)}
+              >
+                <CardContent className="p-8 text-center">
+                  <div className="flex justify-center mb-4">
+                    <div className="p-3 rounded-full bg-primary/10">
+                      <Calendar className="h-8 w-8 text-primary" />
+                    </div>
+                  </div>
+                  <h3 className="text-3xl font-bold mb-2">{year}</h3>
+                  <p className="text-muted-foreground">{examTitle}</p>
+                </CardContent>
+              </Card>
             ))
           ) : (
             <div className="col-span-full text-center py-12">
-              <p className="text-muted-foreground text-lg">{t('noSubjectsFound')}</p>
+              <p className="text-muted-foreground text-lg">{t('noYearsFound')}</p>
             </div>
           )}
         </div>
@@ -227,4 +193,4 @@ const ExamType = () => {
   );
 };
 
-export default ExamType;
+export default SubjectExam;
