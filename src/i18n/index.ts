@@ -9,6 +9,10 @@ const resources = {
       exam: 'Exam',
       logIn: 'Log In',
       signUp: 'Sign Up',
+      entrance: 'Entrance Exam',
+      exit: 'Exit Exam',
+      grade6: 'Grade 6 Exam',
+      grade8: 'Grade 8 Exam',
       
       // Hero Section
       trustedBy: 'Trusted by 10,000+ Students Nationwide',
@@ -114,6 +118,10 @@ const resources = {
       exam: 'ፈተና',
       logIn: 'ግባ',
       signUp: 'ይመዝገቡ',
+      entrance: 'መግቢያ ፈተና',
+      exit: 'መውጫ ፈተና',
+      grade6: 'የ6ኛ ክፍል ፈተና',
+      grade8: 'የ8ኛ ክፍል ፈተና',
       
       // Hero Section
       trustedBy: 'በ10,000+ ተማሪዎች በሀገር ውስጥ የታመነ',
